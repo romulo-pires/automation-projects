@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+
+# pytest
+.pytest_cache/
+
+# Playwright
+test-results/
+playwright-report/
+
+# VS Code
+.vscode/
