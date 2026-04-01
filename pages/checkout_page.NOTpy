@@ -1,0 +1,35 @@
+from playwright.sync_api import Page, expect
+
+
+class CheckoutPage:
+    URL = "https://sitefalso.com/checkout"
+
+    def __init__(self, page: Page):
+        self.page = page
+        self.card_number_field = page.locator("#card-number")
+        self.cvv_field = page.locator("#cvv")
+        self.name_field = page.locator("#card-name")
+        self.address_field = page.locator("#billing-address")
+        self.checkout_button = page.get_by_role("button", name="Checkout")
+        self.error_message = page.locator(".error-message")
+        self.success_message = page.locator(".success-message")
+
+    def goto(self):
+        self.page.goto(self.URL)
+
+    def fill_card_info(self, card_number: str, cvv: str, name: str):
+        self.card_number_field.fill(card_number)
+        self.cvv_field.fill(cvv)
+        self.name_field.fill(name)
+
+    def fill_billing_address(self, address: str):
+        self.address_field.fill(address)
+
+    def try_checkout(self):
+        self.checkout_button.click()
+
+    def check_invalid_card_error(self):
+        expect(self.error_message).to_contain_text("Número de cartão inválido")
+
+    def check_checkout_success(self):
+        expect(self.success_message).to_contain_text("Order placed successfully")
